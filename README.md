@@ -1,4 +1,4 @@
-Markup :  ## Scores ##  
+## Scores ##  
   
 Assignments  | Scores
 ------------ | ------  
