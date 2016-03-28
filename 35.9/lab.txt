@@ -1,0 +1,213 @@
+1.  First I had to write a trivial program in C that can computer cos(0.5) and
+    print it using printf format %.17g.  It was pretty simple:
+    	  double x = cos(0.5);
+	  printf("%.17g", x);
+
+2.  Then I had to use the ldd command to see which dynamic libraries my
+    program used:
+    	    linux-vdso.so.1 =>  (0x00007ffc88191000)
+	    libc.so.6 => /lib64/libc.so.6 (0x0000003f9d400000)
+	    /lib64/ld-linux-x86-64.so.2 (0x0000003f9d000000)
+
+3.  I called strace to see what system calls my program makes:
+    "strace -c co"
+
+    	    access("/etc/ld.so.preload", R_OK)      = -1
+	    open("/etc/ld.so.cache", O_RDONLY)      = 3
+	    open("/lib64/libc.so.6", O_RDONLY)      = 3
+
+    I make 3 system calls.  All three of them access "so".  They all associate
+    their names with addresses or offsets after compile time.  Of the three,
+    access failed (outputting -1), but open worked.  Access and open were
+    related to the dynamic libraries ld and libc.
+
+4.  I called "ls /usr/bin | awk 'NR%101==304627529%101'" and I received:
+      	     abrt-action-install-debuginfo
+	     autoupdate
+	     chrpath
+	     cxpm
+	     dprofpp
+	     fc-cat
+	     gdk-pixbuf-csource
+	     gnome-panel
+	     gss-client
+	     hp-levels
+	     intltool-update
+	     kdelnk2desktop.py
+	     kstart
+	     lprsetup.sh
+	     migratepages
+	     mysql_secure_installation
+	     ophelp
+	     pamundice
+	     pdffonts
+	     pilot-install-user
+	     pnmtopnm
+	     prezip-bin
+	     rarian-sk-get-scripts
+	     rpmdev-newinit
+	     setxkbmap
+	     sqlite3
+	     testparm
+	     url_handler.sh
+	     xdg-settings
+	     ybmtopbm
+
+    I ran "ldd /usr/bin/insertcommand" and this is what I found.
+    
+    "not a dynamc executable" means that the file isn't a dynamic library.  All
+    the files that respond with that are batch files, therefore returning that.
+
+abrt-action-install-debuginfo:
+    I got "not a dynamic executable"
+autoupdate: 
+    I got "not a dynamic executable"
+chrpath: none
+cxpm: none
+dprofpp:
+    I got "not a dynamic executable"
+fc-cat: none
+gdk-pixbuf-csource: none
+gnome-panel: none
+gss-client: none
+hp-levels:
+    I got "not a dynamic executable"
+intltool-update:
+    I got "not a dynamic executable"
+kdelnk2desktop.py:
+    I got "not a dynamic executable"
+kstate: none
+lprsetup.sh:
+    I got "not a dynamic executable"
+migratepages: none
+mysql_secure_installation:
+    I got "not a dynamic executable"
+ophelp: none
+pamundice: none
+pdffonts: none
+pilot-install-user: none
+pnmtopnm: none
+prezip-bin: none
+rarian-sk-get-scripts:
+    I got "not a dynamic executable"
+rpmdev-newinit:
+    I got "not a dynamic executable"
+setxkbmap: none
+sqlite3: none
+testparm: none
+url_handler.sh
+    I got "not a dynamic executable"
+xdg-settings
+    I got "not a dynamic executable"
+ybmtopbm: none
+
+6.  I used a bash script to find and sort this list.  I created a text file of
+    all the dynamic libraries using bash, then used:
+        "cat adresses.txt | sed s/'([^)]*)'/''/g | sort -u"
+ 
+ /lib64/ld-linux-x86-64.so.2 
+ libaudit.so.1 => /lib64/libaudit.so.1 
+ libavahi-client.so.3 => /usr/lib64/libavahi-client.so.3 
+ libavahi-common.so.3 => /usr/lib64/libavahi-common.so.3 
+ libbluetooth.so.3 => /usr/lib64/libbluetooth.so.3 
+ libbz2.so.1 => /lib64/libbz2.so.1 
+ libcom_err.so.2 => /lib64/libcom_err.so.2 
+ libcrypto.so.10 => /usr/lib64/libcrypto.so.10 
+ libcrypt.so.1 => /lib64/libcrypt.so.1 
+ libc.so.6 => /lib64/libc.so.6 
+ libc.so.6 => /lib/libc.so.6
+ libcups.so.2 => /usr/lib64/libcups.so.2 
+ libdbus-1.so.3 => /lib64/libdbus-1.so.3 
+ libdl.so.2 => /lib64/libdl.so.2 
+ libdl.so.2 => /lib/libdl.so.2
+ libexpat.so.1 => /lib64/libexpat.so.1 
+ libfontconfig.so.1 => /usr/lib64/libfontconfig.so.1 
+ libfreebl3.so => /lib64/libfreebl3.so 
+ libfreetype.so.6 => /usr/lib64/libfreetype.so.6 
+ libgcc_s.so.1 => /lib64/libgcc_s.so.1 
+ libgcrypt.so.11 => /lib64/libgcrypt.so.11 
+ libgdk_pixbuf-2.0.so.0 => /usr/lib/libgdk_pixbuf-2.0.so.0
+ libgio-2.0.so.0 => /lib/libgio-2.0.so.0
+ libglib-2.0.so.0 => /lib64/libglib-2.0.so.0 
+ libglib-2.0.so.0 => /lib/libglib-2.0.so.0
+ libgmodule-2.0.so.0 => /lib64/libgmodule-2.0.so.0 
+ libgmodule-2.0.so.0 => /lib/libgmodule-2.0.so.0
+ libgnutls.so.26 => /usr/lib64/libgnutls.so.26 
+ libgobject-2.0.so.0 => /lib64/libgobject-2.0.so.0 
+ libgobject-2.0.so.0 => /lib/libgobject-2.0.so.0
+ libgpg-error.so.0 => /lib64/libgpg-error.so.0 
+ libgssapi_krb5.so.2 => /lib64/libgssapi_krb5.so.2 
+ libgthread-2.0.so.0 => /lib64/libgthread-2.0.so.0 
+ libgthread-2.0.so.0 => /lib/libgthread-2.0.so.0
+ libICE.so.6 => /usr/lib64/libICE.so.6 
+ libjpeg.so.62 => /usr/lib64/libjpeg.so.62 
+ libk5crypto.so.3 => /lib64/libk5crypto.so.3 
+ libkdecore.so.5 => /usr/lib64/libkdecore.so.5
+ libkeyutils.so.1 => /lib64/libkeyutils.so.1 
+ libkpathsea.so.4 => /usr/lib64/libkpathsea.so.4 
+ libkrb5.so.3 => /lib64/libkrb5.so.3 
+ libkrb5support.so.0 => /lib64/libkrb5support.so.0 
+ libkstartperf.so.4 => /usr/lib64/libkstartperf.so.4
+ liblber-2.4.so.2 => /lib64/liblber-2.4.so.2
+ liblcms.so.1 => /usr/lib64/liblcms.so.1 
+ libldap_r-2.4.so.2 => /lib64/libldap_r-2.4.so.2
+ /lib/ld-linux.so.2
+ liblzma.so.0 => /usr/lib64/liblzma.so.0 
+ libm.so.6 => /lib64/libm.so.6 
+ libm.so.6 => /lib/libm.so.6
+ libmysqlclient_r.so.16 => /usr/lib64/mysql/libmysqlclient_r.so.16 
+ libnetpbm.so.10 => /usr/lib64/libnetpbm.so.10 
+ libnsl.so.1 => /lib64/libnsl.so.1 
+ libnspr4.so => /lib64/libnspr4.so 
+ libnss3.so => /usr/lib64/libnss3.so 
+ libnssutil3.so => /usr/lib64/libnssutil3.so 
+ libnuma.so.1 => /usr/lib64/libnuma.so.1 
+ libopenjpeg.so.2 => /usr/lib64/libopenjpeg.so.2 
+ libpango-1.0.so.0 => /usr/lib64/libpango-1.0.so.0 
+ libpangoft2-1.0.so.0 => /usr/lib64/libpangoft2-1.0.so.0 
+ libpangox-1.0.so.0 => /usr/lib64/libpangox-1.0.so.0 
+ libpangoxft-1.0.so.0 => /usr/lib64/libpangoxft-1.0.so.0 
+ libpisock.so.9 => /usr/lib64/libpisock.so.9 
+ libplc4.so => /lib64/libplc4.so 
+ libplds4.so => /lib64/libplds4.so 
+ libpng12.so.0 => /usr/lib64/libpng12.so.0 
+ libpng12.so.0 => /usr/lib/libpng12.so.0
+ libpoppler.so.5 => /usr/lib64/libpoppler.so.5 
+ libpopt.so.0 => /lib64/libpopt.so.0 
+ libpq.so.5 => /usr/lib64/libpq.so.5
+ libpthread.so.0 => /lib64/libpthread.so.0 
+ libpthread.so.0 => /lib/libpthread.so.0
+ libQtCore.so.4 => /usr/lib64/libQtCore.so.4
+ libQtDBus.so.4 => /usr/lib64/libQtDBus.so.4
+ libQtNetwork.so.4 => /usr/lib64/libQtNetwork.so.4
+ libQtXml.so.4 => /usr/lib64/libQtXml.so.4
+ libresolv.so.2 => /lib64/libresolv.so.2 
+ libresolv.so.2 => /lib/libresolv.so.2
+ librt.so.1 => /lib64/librt.so.1 
+ librt.so.1 => /lib/librt.so.1
+ libsasl2.so.2 => /usr/lib64/libsasl2.so.2
+ libselinux.so.1 => /lib64/libselinux.so.1 
+ libselinux.so.1 => /lib/libselinux.so.1
+ libsmime3.so => /usr/lib64/libsmime3.so 
+ libSM.so.6 => /usr/lib64/libSM.so.6 
+ libsoftokn3.so => /usr/lib64/libsoftokn3.so 
+ libsqlite3.so.0 => /usr/lib64/libsqlite3.so.0 
+ libssl3.so => /usr/lib64/libssl3.so 
+ libssl.so.10 => /usr/lib64/libssl.so.10 
+ libstdc++.so.6 => /usr/lib64/libstdc++.so.6 
+ libtasn1.so.3 => /usr/lib64/libtasn1.so.3 
+ libtiff.so.3 => /usr/lib64/libtiff.so.3 
+ libusb-0.1.so.4 => /usr/lib64/libusb-0.1.so.4 
+ libuuid.so.1 => /lib64/libuuid.so.1 
+ libX11.so.6 => /usr/lib64/libX11.so.6 
+ libXau.so.6 => /usr/lib64/libXau.so.6 
+ libxcb.so.1 => /usr/lib64/libxcb.so.1 
+ libXext.so.6 => /usr/lib64/libXext.so.6 
+ libXft.so.2 => /usr/lib64/libXft.so.2 
+ libXmu.so.6 => /usr/lib64/libXmu.so.6 
+ libXrender.so.1 => /usr/lib64/libXrender.so.1 
+ libXt.so.6 => /usr/lib64/libXt.so.6 
+ libz.so.1 => /lib64/libz.so.1 
+ libz.so.1 => /lib/libz.so.1
+ linux-gate.so.1 =>
+ linux-vdso.so.1 =>

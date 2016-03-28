@@ -1,0 +1,115 @@
+1.  To get a copy of the Diffutils repository in the Git format, I typed
+    "git clone ~eggert/src/gnu/diffutils" which created a clone of the
+    repository in a directory called gitroot that I made for this lab.
+
+2.  Navigating into diffutils, I put git-log into a textfile named git-log.txt
+    by typing "git log > git-log.txt".
+
+3.  I typed "git tag > git-tags.txt.
+
+4.  To find it I typed "git log --all --grep='Maint: quote' > quote-patch.txt".
+
+5.  I typed "git checkout v3.0"
+
+6.  I tried to patch it but it said my patch file was garbage.  Then I found
+    the commit identity which was "62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f".
+    I used "git format-patch -1 --stdout <commit> > quote-patch.txt".
+
+    To patch it I tried typing "patch -p1 < quote-patch.txt".
+    I had some patches that I skipped.
+
+7.  It showed us what we modified.
+    HEAD detached at v3.0
+    Changes not staged for commit:
+    (use "git add <file>..." to update what will be committed)
+    (use "git checkout -- <file>..." to discard changes in working directory)
+    
+    modified:   NEWS
+    modified:   README
+    modified:   TODO
+    modified:   doc/diagmeet.note
+    modified:   ms/config.bat
+    modified:   ms/config.site
+    modified:   po/en.po
+    modified:   src/analyze.c
+    modified:   src/cmp.c
+    modified:   src/context.c
+    modified:   src/diff.c
+    modified:   src/diff.h
+    modified:   src/diff3.c
+    modified:   src/dir.c
+    modified:   src/ifdef.c
+    modified:   src/io.c
+    modified:   src/sdiff.c
+    modified:   src/side.c
+    modified:   src/system.h
+    modified:   src/util.c
+    modified:   tests/help-version
+
+9.  I started opening each of the files above and using the command C-x v u.
+    After every vc-revert it asked
+    "Discard changes in /u/cs/ugrad/bradleyz/gitroot2/diffutils/insertfile?"
+    I asked my TA and he said to type yes because we are discarding them.
+    For the .c files I used C-x v = to open vc-diff.  Then I searched through
+    it looking for changes and I manually changed the quotes back that were
+    inside comments.  To revert back the hunks I want, I typed C-c C-a.
+
+10. I typed "emacs src/*.c.rej".  I ended up opening diff.c.rej and
+    diff3.c.rej.
+
+11. The untracked files were these:
+    NEWS.orig
+    README-hacking.orig
+    README-hacking.rej
+    README.orig
+    README.rej
+    cfg.mk.orig
+    cfg.mk.rej
+    git-log.txt
+    git-tags.txt
+    ms/config.site.orig
+    quote-patch.txt
+    src/cmp.c.orig
+    src/context.c.orig
+    src/diff.c.orig
+    src/diff.c.rej
+    src/diff.h.orig
+    src/diff3.c.orig
+    src/diff3.c.rej
+    src/dir.c.orig
+    src/sdiff.c.orig
+    src/system.h.orig
+    src/util.c.orig
+    tests/help-version.orig
+
+    To remove them all I just typed "rm insertfilename".
+
+12. Now git status displays:
+    	modified:   src/cmp.c
+    	modified:   src/diff.c
+    	modified:   src/diff3.c
+    	modified:   src/dir.c
+    	modified:   src/sdiff.c
+    	modified:   src/util.c
+    I then typed "git diff > quote-3.0-patch.txt".
+
+13. The README-hacking file said that The first step (skipping the CVS part)
+    was to do "./bootstrap" in order to get the other files needed to build,
+    which are extracted from other source packages.  The next steps were to
+    "./configure", "make", and "make check".  At this point there should be no
+    difference between the local copy and the master.  As a test,
+    "cvs diff -pu" should output no difference.
+    "diff . -” outputted: "diff: cannot compare '-' to a directory"
+    One sample line from "diff --help":
+    "FILES are 'FILE1 FILE2' or 'DIR1 DIR2' or 'DIR FILE...' or 'FILE... DIR'."
+    Both examples have ' rather than ` as the left quotes.
+
+14. I moved to the original diffutil's source folder, then copied everything to
+    a directory I made called diffutils-3.0 using "cp * ~/w4/diffutils-3.0".
+    Then I moved to the modified version's source code and did the same thing.
+    I then moved to the git and ran 
+    “src/diff -pru 
+    ~/w4/diffutils-3.0 ~/w4/diffutils-3.0-patch >quote-3.0-test.txt”
+
+15.  I typed "diff quote-3.0-test.txt quote-3.0-patch.txt".  There were many
+     differences, and the differences were not innocuous.

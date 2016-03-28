@@ -1,0 +1,39 @@
+First I had to wget http://ftp.gnu.org/gnu/coreutils/coreutils-7.6.tar.gz. To
+untar and unzip it, I used "tar -xzvf coreutils-7.6.tar.gz".  Then I made the
+directory coreutilsInstall using the command mdir.  I then went into the
+coreutils-7.6 directory using cd, and then I read the INSTALL file with emacs.
+To install coreutils in the temporary directory, I had to use the --prefix flag
+that I read in the INSTALL file.
+
+To configure it, I typed
+"./configure --prefix = "/u/cs/ugrad/bradleyz/coreutilsInstall".
+To compile it I typed "make".  To install it I typed "make install".
+
+After navigating into the coreutilsInstall directory, when typing "bin/ls -al"
+I got the incorrect format with the YYYY-MM-DD format.  Also I could have
+navigated into ~/coreutilsInstall/bin and then ran the command.
+
+To copy paste the patch I used wget to get the html of the website then killed
+and yanked the text onto patch_file saving it as mpatch.diff.  For some reason
+copypasting gave me an error.
+
+I then ran "patch < msg.diff" but then it said it can't find file to patch at
+input line 3.  I realized I had to change directories into the coreutils-7.6
+folder rather than the coreutilsInstall one.  I used man patch to find pnum
+(-p1 specifically) which made it search for src/ls.c rather than a/src/ls.c.
+The command "patch -p1 > msg.diff" returned "Hunk #1 succeeded at 2013 (offset
+-1 lines)." and "Hunk #2 succeeded at 2028 (offset -1 lines)."
+
+Only the commands remaking ls.c were needed.  That was the only file that was
+modified after all.  The following commands "CC ls.o", "CCLD dir", "CCLD vdir",
+and "CCLD ls" were the most important and they created the object file. Almost
+every other command such as "Making all in lib" or "Making all in doc" aren't
+really necessary.  The "Making all in man" changes the man page and prints "GEN
+dir.1", "GEN vdir.1", and "GEN ls.l". Because I did it in my current directory,
+I had a lot of commands that just moved around between the various directories.
+
+After using "make", I navigated back into coreutilsInstall/bin to test it, and
+the fix worked locally.  I created a file, then I used touch -t 201001010000
+randfile to create another file over a year old.  Calling "ls -l" had the
+incorrect dates, but calling "./ls -l" had the correct formatting for the
+dates.  Both the recently modified as well as the "year-old" file worked.

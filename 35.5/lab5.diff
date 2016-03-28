@@ -1,0 +1,25 @@
+--- timespec.h	2016-02-05 11:04:34.390153000 -0800
++++ /u/cs/ugrad/bradleyz/w5/oc/coreutils-with-bug/lib/timespec.h	2016-02-05 11:05:18.743857000 -0800
+@@ -19,6 +19,8 @@
+ #if ! defined TIMESPEC_H
+ # define TIMESPEC_H
+ 
++#include <limits.h>
++
+ # include <sys/types.h>
+ # if TIME_WITH_SYS_TIME
+ #  include <sys/time.h>
+@@ -45,7 +47,12 @@
+ static inline int
+ timespec_cmp (struct timespec a, struct timespec b)
+ {
+-  int diff = a.tv_sec - b.tv_sec;
++  long diff = a.tv_sec - b.tv_sec;
++  if (diff < INT_MIN) {
++    return INT_MIN;
++  } else if (diff > INT_MAX) {
++    return INT_MAX;
++  }
+   return diff ? diff : a.tv_nsec - b.tv_nsec;
+ }
+ 

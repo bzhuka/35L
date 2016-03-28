@@ -1,0 +1,28 @@
+1.  If the other teams had been observing all the bytes going across the
+    network, the resulting network is still secure.  Because we are using ssh,
+    everything is still encrypted, and even if he got all the bytes, it
+    wouldn't contain any meaningful data without any private keys.
+
+    If the other teams tapped our keyboard, then they would know our passwords
+    for our keys.  Although ssh protects all messages sent through the network,
+    any passwords can still be detected.  That being said, they shouldn't have
+    access to your private key, unless they somehow manage to access our
+    computer.  Also using "ssh-keygen" makes it so we have to type in the
+    password once, then be able to use ssh to log into nay other host without
+    typing in any passwords or passphrases, so the network will still most
+    likely be secure as long as they don't have access to your private key.
+
+    If the other teams got our USB drives, the other teams would have access
+    to any unprotected  private keys, and presumably they will be able to use
+    it to decrypt any of our information.  If there's a password on our
+    private keys though, it should be safe given that the password isn't too
+    easy to crack.
+
+2.  "gpg --verify" only checks that the document is legit and not tampered
+    with.  It doesn't check to see who sent it.  Because public keys are
+    public, then anyone can send any message with anyone else's private key
+    given that they know it.  To solve this problem, you could either directly
+    contact the person to make sure they key and message is from them, or you
+    could use a third party company that has a file of digital signatures.  It
+    would work kind of like a certificate mechanism.  Then the third party will
+    be able to tell who created the files given the keys and verification.

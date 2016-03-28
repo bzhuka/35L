@@ -1,0 +1,48 @@
+1.  You use man -k to "search for the specified string in *all* man pages."  
+    I used man man to find it.
+2.  The cp program is located at /bin/cp and the wc program is located at
+    /usr/bin/wc.  I used which to find them.
+3.  Using find /usr/bin -name ?, I found X, w, and [.  /usr/bin/X runs the X
+    Window System according to man X.  Running /usr/bin/w gives me a list of
+    logged in users and information including USER, TTY, FROM, LOGIN@, IDLE, 
+    JCPU, PCPU, WHAT.  Accoring to man [[], [ is a bash builtin.
+4.  It is actually executing /etc/alternatives/emacs. I used ls -la to find it.
+5.  g+s means that all users in the file's group will gain the ability to set
+    user or group id on execution.  o-x means you are removing the execute right
+    from users in the other category.  I used man chmod to find it.
+6.  The option of find you would use is -mtime -21 according to man find.
+7.  To find my results I typed "find / -type d -mtime -21 2>/dev/null". 
+     Some results I got back were
+    /bin, /u/be/ugrad, /u/bm/class, /u/cs/grad, /var/lib/yum,
+    /usr/libexec/git-core, and /usr/share/wallpapers/EOS.
+8.  20
+    find is in /bin (I used which find). Then I used ls -la and counted.
+9.  The oldest file is libgamin-1.so.0.1.10 according to ls -lat.
+10.  According to man locale, it gets data from the LC_* environment variables
+     including LC_TYPE, LC_COLLATE, LC_TIME, LC_NUMERIC, LC_MONETARY, and 
+     LC_MESSAGES.
+11.  Buffer-menu-sort, Buffer-menu-sort-by-colum, ibuffer-invert-sorting,
+     ibuffer-toggle-sorting-mode, rmail-sort-by-author, 
+     rmail-sort-by-correspondent, rmail-sort-by-date, rmail-sort-by-labels,
+     rmail-sort-by-lines, rmail-sort-by-recipient, rmail-sort-by-subject,
+     sort-columns, sort-fields, sort-lines, sort-numeric-fields, sort-pages,
+     sort-paragraphs, sort-regexp-fields.
+     I found them all using C-h a sort*
+12.  I found this using C-h b and C-h k
+     C-M-a beginning-of-defun - Move backward to the beginning of a defun.
+     C-M-b backward-sexp - Move backward across one balanced expression.
+     C-M-c exit-recursive-edit - exit from the innermost recursive edit.
+     C-M-d down-list - Move forward down one level of parentheses.
+     C-M-e end-of-defun	- Move forward to next end of defun.
+     C-M-f forward-sexp - Move forward across one balanced expression.
+     C-M-h mark-defun - Put mark at end of this defun, point at beginning.
+13.  After running C-h k C-g, it says: "C-g runs the command keyboard-quit,
+     which is an interactive compiled Lisp function.  During execution of Lisp
+     code, this character causes a quit directly. At top-level, as an editor
+     command, this simply beeps."  Basically it quits your current command, 
+     including partially typed ones.
+14.  The Emac function yank brings back the last "killed" text. It's kind of 
+     like paste.  I found it while reading through the Emac tutorial found
+     by pressing C-h t.
+15.  The directory listing of the Emacs dired command shows hidden files.  
+     Other than that, they both give the same information.

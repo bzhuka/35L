@@ -1,0 +1,33 @@
+2. I typed "git checkout v3.0".  Then I typed "git checkout -b quote"
+
+3. I typed "patch -p1 < quote-3.0-patch.txt" and the output was:
+    patching file src/cmp.c
+    patching file src/diff.c
+    patching file src/diff3.c
+    patching file src/dir.c
+    patching file src/sdiff.c
+    patching file src/util.c
+
+5. I made a ChangeLog, then used C-x 4 a, then I made filled it in using the
+old one as a base.
+
+I then did "git add ."
+
+To commit my changes with my ChangeLog as the commit message I typed
+"git commit -f ChangeLog".
+
+7. I typed "git format-patch --stdout -1 HEAD > formatted-patch.txt".
+
+8. My partner was Jesse Cai.  His UID is 304634445.
+
+I first checked out version 3.0 into a new temporary branch partner.  I applied
+his patch with "git am formatted-patch.txt", built it using "./bootstrap",
+"./configure", "make", and typed "make check".  My partner's patch worked.
+
+9. I typed "make distdir", and after checking diffutils-3.0/ChangeLog, the
+commit message was added at the very top.
+
+10. The path we were given did not work, so I had to follow the link and find
+their "git clone git://git.savannah.gnu.org/emacs.git".
+
+I had to install X11 on my mac.

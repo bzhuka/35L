@@ -1,0 +1,134 @@
+1.First I had to type "export LC_ALL='C'" to change my locale.  In
+order to get a words.txt file, I typed "sort -o words
+/usr/share/dict/words".  Then to get the HTML of this assignment's web
+page, I typed "wget insertURL".
+
+In order to run the commands, I had to figure out how to do it.  After
+googling it, I discovered cat and |.  I then saved each command into a textfile
+with "#!/bin/bash" at the top of it and ran it using the bash command.
+
+a. tr -c 'A-Za-z' '[\n*]'
+It replaces everything that's not between A-Z or a-z by a new line, including
+symbols and punctuation.
+b. tr -cs 'A-Za-z' '[\n*]'
+This also replaces everything not between A-Z or a-z by a new line, but it also
+condenses it afterwards making it so the output contains no blank lines.
+c. tr -cs 'A-Za-z' '[\n*]' | sort
+This does everything the last command did (replace nonletters with new lines,
+then condense), but it also then sorts it alphabetically.  It puts uppercase
+letters directly behind their lowercase counterpart.
+d. tr -cs 'A-Za-z' '[\n*]' | sort -u
+Once again this does everything the previous command did.  Afterwards, it also
+deletes all duplicates.
+e. tr -cs 'A-Za-z' '[\n*]' | sort -u | comm - words
+It combines the words in the html file with the words in the words file.  It
+then outputs them in three different columns.  The first column is comprised
+of words only contained in the html file, such as Za.  The second column is
+comprised of words only contained in the words file, such as yote.  The third
+column is comprised of words contained in both files, such as you.
+f. tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 - words
+This command does the same thing as the last command, but then afterwards it
+then additionally supresses the second (words unique to the words file) and
+third (words found in both files) columns.
+
+2. I first used wget to get the html file of the website (wget insertlink).
+Then I created a buildwords file and started writing the script.
+
+#!/bin/bash
+
+#Makes uppercase into lowercase
+tr '[:upper:]' '[:lower:]' |
+
+# finds stuff that start with <td>
+grep '<td>' |
+
+#removes every other line
+sed -n '1~2!p' |
+
+#Removes tags.  I had to google how to make it global rather than just once
+#line (use g at the end).
+sed 's/<[//]*[a-z]*>//g' |
+
+#Treats ` as '
+sed "s/\`/\'/g" |
+
+#Replaces puctuation with new lines and deletes blank lines.
+tr -cs "A-za-z\'" '[\n*]' |
+
+#Deletes all words containing letters not found in the Hawaiian language.
+sed "s/[^p^k^m^n^w^l^h^a^e^i^o^u^\']//g" |
+
+#Removes duplicates and pipes into standard output
+sort -u
+
+3. To modify the shell command, I replace words with hwords.
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 - hwords
+To get the webpage I did wget (wget insertlink).
+
+Using the bash command, I typed
+cat assign2.html | tr '[:upper:]' '[:lower:]' | bash esc
+to use my english spell checker which was inside a file named esc.
+
+esc contained -
+_____________
+#!/bin/bash
+
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 -words
+_____________
+
+To use my Hawaiian spell checker I typed
+cat assign2.html | tr '[:upper:]' '[:lower:]' | bash hsc
+
+hsc contained -
+_____________
+#!/bin/bash
+
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 -hwords
+_____________
+
+To count the words I used wc -w at the end.
+English Misspelled Words- 38
+Some Examples:
+onlinepubs
+opengroup
+posix
+sameln
+seasnet
+td
+toc
+ul
+usr
+utf
+vandebogart
+wget
+wiki
+wikipedia
+www
+Hawaiian Misspelled Words - 405
+Some Examples:
+web
+were
+wget
+what
+where
+which
+whose
+why
+wikipedia
+with
+word
+words
+work
+working
+worry
+write
+www
+x
+y
+you
+your
+z
+
+There are words that are "misspelled" as English but not as Hawaiian and vice
+versa.  Some examples of the prior are halau, lau or wiki.  Some examples of
+the latter are lc, like or laboratory.

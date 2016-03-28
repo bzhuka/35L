@@ -1,0 +1,103 @@
+1.  First I downloaded a tar file onto my computer.  I had to move it to the server,
+    so I typed
+    "scp ~/Downloads/coreutils-with-bug.tar.gz bradleyz@lnxsrv.seas.ucla.edu:~/w5"
+
+2.  Then I had to build the old version of coreutils.  I made a new directory, moved
+    my tar file into it, then extracted it with "tar xzvf coreutils-with-bug.tar.gz".
+    To build it, I used "./configure" and "make".
+
+    With "make" it failed with:
+    Makefile:659: recipe for target 'utimecmp.o' failed
+    make[3]: *** [utimecmp.o] Error 1
+    make[3]: Leaving directory '/w/home.07/cs/ugrad/bradleyz/w5/oc/coreutils-with-bug/lib'
+    Makefile:414: recipe for target 'all' failed
+    make[2]: *** [all] Error 2
+    make[2]: Leaving directory '/w/home.07/cs/ugrad/bradleyz/w5/oc/coreutils-with-bug/lib'
+    Makefile:419: recipe for target 'all-recursive' failed
+    make[1]: *** [all-recursive] Error 1
+    make[1]: Leaving directory '/w/home.07/cs/ugrad/bradleyz/w5/oc/coreutils-with-bug'
+    Makefile:357: recipe for target 'all' failed
+    make: *** [all] Error 2
+
+3.  I had to patch it, I used
+    "wget http://web.cs.ucla.edu/classes/winter16/cs35L/assign/coreutils.diff".
+    To patch it I typed "patch -p0 < coreutils.diff"
+    I reconfigured, using "./configure CFLAGS='-g3 -O0'" and then did "make".
+
+4.  I typed "df -l" to find out which directories belong to the local file system.  I got
+    back many answers indluding tmp.
+
+5.  I moved to tmp, and created an old file using touch
+    "touch -d '1918-11-11 11:00 GMT' oldfile"
+    and new files
+    "touch new" and "touch -d '2015-11-11 11:00 GMT' newish".
+    
+    
+6.  Using the default ls, it placed the new files above the old file when typing
+    "ls -lt oldfile new newish".
+    	The output was in order: new, newish, oldfile.
+    When using the newly made ls, the bug happened placing the old file above the new
+    ones.  I typed:
+    "~/w5/oc/coreutils-with-bug/src/ls -lt new oldfile newish"
+    	The output was in order: oldfile, new, newish.
+
+7.  Having recreated the bug, I used a debugger to try to figure out what went wrong.
+    I typed "gdb -tui ls" while inside the directory with my compiled ls.
+
+    (gdb) run -lt /tmp/new /tmp/oldfile /tmp/newish
+    	  displayed the problem
+	  
+    I then set a breakpoint at the start to step through the program.
+
+    (gdb) b main
+    	  It'll find the function main and insert a break point.
+
+    I then ran through the program as it ran the above command that displayed the problem
+    typing "s" to go to the next step.  I typed "info locals" to look at the variables.
+
+    I got to a line that said "get_current_time" and I set a breakpoint there.
+
+    I analyzed the local variables inside using:
+    (gdb) info locals
+    	  timespec = {tv_sec = 0,	tv_nsec = 140737488347424}
+
+    Searching for timespec, I found timespec_cmp, so I used "(gdb) b timespec_cmp" and got
+    back "file ../lib/timespec.h, line 48."
+
+    Emacing into timespec.h, on line 48, I found "int diff = a.tv_sec - b.tv_sec;".
+    Using "(gdb) print a.tv_sec" and "(gdb) print b.tv_sec", I found that:
+    a.tv_sec = 1447239600 and b.tv_sec = -1613826000.  A simple subtraction should make
+    diff = 3061065600.  However, using "(gdb) print diff", I found
+    diff = -1233901696 which is obviously incorrect.  The reason is that diff is stored in
+    an int, and int's can overfill easily.
+
+    I copyed the unmodified timespec into a directory. "cp timespec.h ~/w5".
+    
+    I emac'd timespec.h and changed "int diff = a.tv_sec - b.tv_sec;" into
+    "long diff = a.tv_sec - b.tv_sec;".
+    I then added:
+    if (diff < INT_MIN) {
+       return INT_MIN;
+    } else if (diff > INT_MAX) {
+       return INT_MAX;
+    }
+    before "return diff ? diff : a.tv_nsec - b.tv_nsec;" and had to write
+    "#include <limits.h>"
+
+    I exited, used "make", went into /tmp, and tried
+    "~/w5/oc/coreutils-with-bug/src/ls -lt oldfile new newish"
+    I got back:
+    "-rw-r--r-- 1 bradleyz csugrad 0 2016-02-05 10:21 new
+    -rw-r--r-- 1 bradleyz csugrad 0 2015-11-11 03:00 newish
+    -rw-r--r-- 1 bradleyz csugrad 0 1918-11-11 03:00 oldfile"
+    which is the correct order.
+
+8.  Having fixed the bug, I created a diff file using the copy of the unmodified timespec.h
+    typing "diff -u timespec.h ~/w5/oc/coreutils-with-bug/lib/timespec.h > lab5.diff".
+
+9.  I tried using ls, and found out that the linux server's ls is broken as well.
+    I used the earlier touch commands.
+    "touch -d '1918-11-11 11:00 GMT' oldfile" "touch new"
+    and "touch -d '2015-11-11 11:00 GMT' newish".
+    Then using a simple "ls -lt", it listed oldfile as first.  Therefore SEASnet's servers
+    are broken as well.

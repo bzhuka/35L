@@ -1,0 +1,35 @@
+First I typed "ifconfig" to figure out my ip address.
+I typed
+   "sudo apt-get update" to update my apt.
+Then I typed
+   "sudo apt-get install openssh-server".
+To create an account for the client, I typed
+   "sudo useradd -d /home/asdf -m asdf"
+To create a password I typed:
+   "sudo passwd asdf",
+then when prompted I typed "asdf".
+Then I created a .ssh directory for asdf by navigating then making it.
+   "cd /home/asdf"
+   "sudo mkdir .ssh"
+I then changed ownership and permission on the .ssh directory.
+   "sudo chown -R asdf .ssh"
+   "sudo chmod 700 .ssh"
+I sent my ip, username, and password to my partner, Xinyu Yang, and he logged
+on and made a file.  I went back to my computer, used "ls", and saw it.
+
+Next I had to connect to him with:
+"ssh yxy@10.97.85.31", and typed "yes" for the unidentified fingerprint, and
+typed in his password.
+Once in, I typed "touch new", and when he checked, he saw it.
+
+I exited the ssh then navigated back into "/home/asdf" and generated a public
+and private key.
+    "ssh-keygen"
+I copied my public key to the server for key-based authentication
+   "ssh-copy-id -i yxy@10.97.85.31"
+Then added a private key to the authentication agent:
+   "ssh-add"
+Then my partner sshed into it, and it didn't ask for any password.
+I tried to ssh into my partner, and it also didn't ask for any password.
+   "ssh -X yxy@10.97.85.31"
+I ran xterm and it worked.

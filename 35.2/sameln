@@ -1,0 +1,24 @@
+#!/bin/bash
+
+cd "$1"
+for file1 in .* *
+do
+    for file2 in .* *
+    do
+	if [ -f "$file1" ] && [ -f "$file2" ] && [ "$file1" != "$file2" ]
+	then	   
+	    cmp -s "$file1" "$file2"
+	    if [ $? == 0 ]
+	    then
+	       if [ "file1"\<"file2" ]
+	       then
+		   rm "$file2"
+		   ln "$file1" "$file2"
+               else
+                   rm "$file1"
+                   ln "$file2" "$file1"
+	       fi
+	    fi
+	fi
+    done
+done

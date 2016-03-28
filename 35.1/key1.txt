@@ -1,0 +1,75 @@
+1.1
+1. (e m a c s SP e x e r 1 . h t m l)
+2. C-s U T F Enter
+3. C-s I n s Enter
+4. M-< C-s H Enter
+5. C-s a r r o w Enter M-b
+6. C-e
+7. C-a
+8. M-<
+9. I haven't used any arrow keys.
+10. I did it all with commands already.
+11. C-x C-c
+
+1.2
+1. (e m a c s SP e x e r 2 . h t m l)
+2. C-u 1 8 C-n C-k
+3. C-s D E C-a C-k
+4. C-s < ! C-a C-SP C-n C-n C-n C-w 
+5. C-s < ! C-b C-b M-z >
+
+1.3
+1. (e m a c s SP e x e r 3 . h t m l)
+2. M-% 1 Enter 3 7 Enter n y n y Escape
+3. M-< M-% U T F - 8 Enter U S - A S C I I Enter y Escape
+4. M-< C-s < o C-e Enter
+5. C-x C-s C-x C-c
+
+1.4
+1. c a t SP e x e r 2 . h t m l SP e x e r 2 . d i f f SP > e x e r 4 . h t m l
+2. (e m a c s SP e x e r 4 . h t m l)
+3. m-> C-u 5 C-p C-f C-k m-< C-s < p > s h C-a C-k C-y M-y
+4. C-s - < ! C-a C-f C-SP C-n C-n C-n C-b C-w M-< C-s 2 > C-n C-n C-y Delete
+   C-s - < ! C-a C-f C-k M-< C-s 2 > H C-n C-n C-y
+   C-s - < ! C-a C-f C-SP C-n C-n C-n C-w M-< C-s 2 > S C-n C-n C-y
+5. M-< C-s / h t m l > C-SP M-> C-W
+6. C-_
+7. - - > M-< C-s / h t m l > Enter Enter < ! - -
+8. <ol> occured 7 times.
+   C-s < o l > C-s C-s C-s C-s C-s C-s C-s M-< M-% < o l > Enter < O l > Enter !
+9. diff -u exer1.html exer4.html >exer4.diff
+
+1.5
+1. C-x d Enter + j u n k
+2. C-s j u n k Enter Enter C-x C-f h e l l o . c
+3. M-x c o m p i l e Enter C-a C-k g c c SP h e l l o . c
+4. C-x b h e l l o - o u t Enter C-u M-! . / a . o u t Enter
+5.
+#include <stdio.h>
+int
+main (void)
+{
+  char n = '\n';
+  char b = '\\';
+  char q = '"';
+  char const *p = "#include <stdio.h>%cint%cmain (void)%c{%c  char n = '%cn';%c  char b = '%c%c';%c  char q = '%c';%c  char const *p = %c%s%c;%c  printf (p, n, n, n, n, b, n, b, b, n, q, n, q, p, q, n, n, n, n);%c  return 0;%c}%c";
+  printf (p, n, n, n, n, b, n, b, b, n, q, n, q, p, q, n, n, n, n);
+  return 0;
+}
+
+1.6
+1. C-x b * s c r a t c h * Enter
+2. ( r a n d o m ) C-j
+3. ( s e t q SP x SP ( r a n d o m ) ) C-j
+   ( s e t q SP y SP ( r a n d o m ) ) C-j 
+   ( s e t q SP z SP ( r a n d o m ) ) C-j 
+4. ( * SP x SP y SP z ) C-j
+   The answer is mathmatically incorrect. I had x = 737004041327947834, 
+   y = 1000278277145540493, and z = 759900912694765332.  For my product I got
+   520554061706944004.  Obviously that is way too small.
+5. M-: ( * SP x SP y SP z ) Enter
+   The first number outputted is the same, but following it it has
+   (#somestring , #somestring).
+6. The random integers are not truly random in the mathematical sense because it
+   is impossible for our computers to generate truly random numbers.  They have
+   to use seeds.

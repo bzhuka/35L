@@ -1,0 +1,26 @@
+#!/bin/bash
+
+#Makes uppercase into lowercase
+tr '[:upper:]' '[:lower:]' |
+
+# finds stuff that start with <td>
+grep '<td>' |
+
+#removes every other line
+sed -n '1~2!p' |
+
+#Removes tags.  I had to google how to make it global rather than just once
+#line (use g at the end).
+sed 's/<[//]*[a-z]*>//g' |
+
+#Treats ` as '
+sed "s/\`/\'/g" |
+
+#Replaces puctuation with new lines and deletes blank lines.
+tr -cs "A-za-z\'" '[\n*]' |
+
+#Deletes all words containing letters not found in the Hawaiian language.
+sed "s/[^p^k^m^n^w^l^h^a^e^i^o^u^\']//g" |
+
+#Removes duplicates and pipes into standard output
+sort -u

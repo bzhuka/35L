@@ -1,0 +1,77 @@
+I first found files of varying input lines inside my current directory.
+lab.txt had 74 lines.
+randBytes.py had 23 lines.
+sfrobu.c had 196 lines.
+testBytes.txt had 19731 lines.
+
+sfrob -
+   testBytes.txt(19731) -
+      real		0m0.837s
+      user		0m0.288s
+      sys		0m0.106s
+
+   sfrobu.c(196) -
+      real	 0m0.003s
+      user	 0m0.001s
+      sys	 0m0.003s
+
+   lab.txt(74) -
+      real     0m0.003s
+      user     0m0.002s
+      sys      0m0.001s
+
+   randBytes.py(23) -
+      real	    0m0.002s
+      user	    0m0.000s
+      sys	    0m0.002s
+      
+sfrobu -
+   testBytes.txt(19731) - 255658 Comparisons
+      real		0m6.420s
+      user		0m0.308s
+      sys		0m6.148s
+
+   sfrobu.c(196) - 4551 Comparisons
+      real	 0m0.012s
+      user	 0m0.002s
+      sys	 0m0.009s
+
+   lab.txt(74) - 4215 Comparisons (Abnormally high due to amount of words)
+      real     0m0.010s
+      user     0m0.000s
+      sys      0m0.010s
+
+   randBytes.py(23) - 211 Comparisons
+      real	    0m0.003s
+      user	    0m0.000s
+      sys	    0m0.002s
+
+Sfrob is much faster than sfrobu for system time.
+
+Sfrobs-
+   testBytes.txt(19731)
+      real		0m0.901s
+      user		0m0.237s
+      sys		0m0.155s
+
+   sfrobu.c(196)
+      real	0m0.008s
+      user	0m0.005s
+      sys	0m0.006s
+
+   lab.txt(74)
+      real	0m0.012s
+      user	0m0.006s
+      sys	0m0.005s
+
+   randBytes.py(23)
+      real		0m0.007s
+      user		0m0.005s
+      sys		0m0.005s
+
+While sfrobs is a bit slower than sfrob, it isn't by much, and the difference
+is a smaller and smaller ratio the bigger the file is.
+
+
+My estimate of the number of comparisons as a function of the number of input
+lines for sfrobu is nlog(n) where n is the number of input lines.

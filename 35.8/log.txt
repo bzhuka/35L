@@ -1,0 +1,33 @@
+First I generated a file of 10,000,000 random double-precision floating point
+numbers with one per line.  I ran:
+  "od -An -f -N 8000000 < /dev/urandom | tr -s '''\n' > random.txt"
+Then I went and deleted the empty line and the start.
+To time sort I typed:
+  "time -p sort -g --parallel=2 random.txt> /dev/null"
+And I got:
+  real 9.56
+  user 18.00
+  sys 0.05
+
+1 Thread:
+  real 17.72
+  user 17.69
+  sys 0.03
+
+2 Threads:
+  real 9.56
+  user 18.00
+  sys 0.05
+
+4 Threads:
+  real 5.90
+  user 18.96
+  sys 0.05
+
+8 Threads:
+  real 4.83
+  user 22.32
+  sys 0.09
+
+The CPU tme goes up with more threads, because it's the sum of the CPU times of
+all the threads used.  Real time goes down.

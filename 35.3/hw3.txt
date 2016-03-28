@@ -1,0 +1,21 @@
+1. Brady removed "case_long_iso_time_style:" because it was duplicated.  He
+   had a switch statement, and by having it twice there and having it once
+   there it wouldn't make a difference.  It also wasn't necessary to remove
+   it.  Brady was just cleaning up the code, but it made no difference to
+   the actual result of running the code.
+
+2. People unaccustomed to the traditional UNIX date might be confused initially
+   Also people living in other countries might not format their dates in the
+   right way.  In addition, programs might be built expecting the purely
+   numerical format.  If not updated, those programs wouldn't work correctly
+   anymore as the output is now different.
+
+3. When this script is invoked on an empty file it raises an IndexError.
+   "IndexError: list index out of range"
+   This happens because randline can't process an empty file.  In line 275
+   when the variable seq is empty, then it raises the error.
+
+4. When called using Python 3 rather than Python 2, it raises an IOError.
+   File "randline.py", line 65
+       except IOError as (errno, strerror):
+   Python 3 and Python 2 have different syntax, so obviously it doesn't work.

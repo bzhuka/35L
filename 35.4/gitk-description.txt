@@ -1,0 +1,12 @@
+The upper left window gives information concerning the structure of the
+repository.  It shows where the master, head, and branches are and also
+shows commits.
+The top middle window gives information about the name and email of users.
+The window to the right of that shows the date and time of the commit.
+The left middle window shows information about the SHA1 ID, and a search
+bar that can search for commites containing input.
+The bottom left window shows the ChangeLog file which contains information
+about the commit, the author, the email, the time, the parent and child, as
+well as brances and follows.
+The bottom right window shows a list of files that were impacted by the
+commit that we selected.

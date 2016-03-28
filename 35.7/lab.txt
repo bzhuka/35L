@@ -1,0 +1,74 @@
+1.  For the labratory, first I needed to write a tr2b and tr2u program.
+
+    For tr2b, I'm not too familiar with programming in c, so I had to google
+    how to access parameters in my main, and found "int argc, char** argv".  If
+    there are supposed to be two parameters, then argc should equal three, so
+    I'm decided to return 1 if it doesn't have the right number of parameters.
+    I googled how to report an error, and found
+    "fprinf( stderr, "string here");".
+
+    Next I checked if the from operand had duplicate characters, and returned
+    with an error message if it did.  Then I checked to see they were the same
+    length, and returned with an error message if they weren't.
+
+    For my actual translating process, I just used a loop, and if it found what
+    I was looking for, then the character it should translate into would be on
+    the same index on the to string as it was on the from string.
+
+    I compiled it with "gcc -o tr2b tr2b.c", then ran tests on it.  Everything
+    seemed to work.
+
+2.  Next, I had to make tr2u.c.  I reused most of my code, and only changed the
+    parts necessary, getchar and putchar into read and write.  I ran into
+    problems with pointers and stuff for one of my old methods "trans", so I
+    just copied it into my main and changed accordingly to make it easier.
+
+3.  I made a python script that made a file with 5000000 random bytes.  It used
+    os.urandom to write a file with the specified amount of random bytes.
+
+    Copying one file to another:
+
+Calling "strace -c -o results.txt ./tr2u "h" "e" < testBytes.txt > output.txt"
+      It took a long time, and it keeps alternating between reading and
+      writing.  I assume there are 5000000 system calls for both read and
+      write.  The file is 419.6MB, and i basically contains lines that look
+      like:
+      write(1, "\342", 1)                     = 1
+      read(0, "\251", 1)                      = 1
+      write(1, "\251", 1)                     = 1
+      read(0, "\221", 1)                      = 1
+      write(1, "\221", 1)                     = 1
+      read(0, "\304", 1)                      = 1
+      write(1, "\304", 1)                     = 1
+      read(0, "\247", 1)                      = 1
+      With the exception of the start, lines 24 to 10000024 are like that,
+      so there should be 5000000 for both read and write.
+      
+Calling "strace -c -o results1.txt ./tr2b "h" "e" < testBytes.txt > output.txt"
+      It called read 79 times and write 77 times, and some other system
+      calls, with a total of 182 system calls.
+
+    Copying one file to the terminal:
+
+Calling "strace -c -o results2.txt ./tr2b "h" "e" < testBytes.txt"
+      It didn't take very long.  I had 79 read system calls and 20063 write
+      calls with various other calls such as open, close, fstat, and mmap.  I
+      have a total of 20168 system calls.
+
+Calling "strace -c -o results3.txt ./tr2u "h" "e" < testBytes.txt"
+      It takes a while.  I have 5000000 writes and 5000002 reads with various
+      other calls such as open, close, mmap, and brk.
+
+4.  Using time to see the time it takes:
+
+    Calling "time cat testBytes.txt | ./tr2u "a" "b""
+      real  0m6.020s
+      user  0m0.282s
+      sys   0m5.755s
+
+    Calling "time cat testBytes.txt | ./tr2b "a" "b""
+      real  0m0.883s
+      user  0m0.226s
+      sys   0m0.171s
+
+    Using getchar and putchar is much faster (roughly 33 times faster).
